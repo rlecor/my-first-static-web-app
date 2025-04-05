@@ -1,16 +1,1 @@
-{
-  "routes": [
-    {
-      "route": "HTTP",
-      "methods": [
-        "get",
-        "post",
-        "put",
-        "head",
-        "delete"
-      ],
-      "rewrite": "/",
-      "redirect": "HTTPS"
-    }
-  ]
-}
+{}
