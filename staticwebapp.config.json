@@ -1,12 +1,1 @@
-{
-  "routes": [
-    {
-      "route": "HTTP",
-      "methods": [
-        "post",
-        "get"
-      ],
-      "redirect": "HTTPS"
-    }
-  ]
-}
+{}
