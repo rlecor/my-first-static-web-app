@@ -155,6 +155,23 @@
             margin-bottom: 15px;
         }
 
+        .timer-name-input {
+            width: 100%;
+            padding: 8px;
+            font-size: 16px;
+            text-align: center;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #667eea;
+        }
+
+        .timer-name-input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
         .timer-display {
             font-size: 48px;
             font-weight: 700;
@@ -317,7 +334,7 @@
                 const widget = document.createElement('div');
                 widget.className = 'timer-widget';
                 widget.innerHTML = `
-                    <div class="timer-header">Timer ${this.id}</div>
+                    <input type="text" class="timer-name-input" placeholder="Timer ${this.id}" value="Timer ${this.id}">
                     <div class="timer-display" data-id="${this.id}">00:00:00</div>
                     
                     <div class="timer-inputs">
@@ -344,6 +361,7 @@
 
                 this.element = widget;
                 this.display = widget.querySelector('.timer-display');
+                this.nameInput = widget.querySelector('.timer-name-input');
                 this.startBtn = widget.querySelector('.start-btn');
                 this.pauseBtn = widget.querySelector('.pause-btn');
                 this.resetBtn = widget.querySelector('.reset-btn');
@@ -354,6 +372,12 @@
                 this.startBtn.addEventListener('click', () => this.start());
                 this.pauseBtn.addEventListener('click', () => this.pause());
                 this.resetBtn.addEventListener('click', () => this.reset());
+
+                this.nameInput.addEventListener('input', function() {
+                    if (this.value.trim() === '') {
+                        this.value = `Timer ${this.closest('.timer-widget').querySelector('.timer-display').dataset.id}`;
+                    }
+                });
 
                 [this.hoursInput, this.minutesInput, this.secondsInput].forEach(input => {
                     input.addEventListener('input', function() {
@@ -398,6 +422,7 @@
                 this.hoursInput.disabled = true;
                 this.minutesInput.disabled = true;
                 this.secondsInput.disabled = true;
+                this.nameInput.disabled = true;
 
                 this.interval = setInterval(() => {
                     this.remainingSeconds--;
@@ -410,7 +435,7 @@
                         this.element.classList.add('finished');
                         this.startBtn.disabled = false;
                         this.pauseBtn.disabled = true;
-                        alert(`Timer ${this.id}: Time's up!`);
+                        alert(`${this.nameInput.value}: Time's up!`);
                     }
                 }, 1000);
             }
@@ -436,6 +461,7 @@
                 this.hoursInput.disabled = false;
                 this.minutesInput.disabled = false;
                 this.secondsInput.disabled = false;
+                this.nameInput.disabled = false;
             }
         }
 
