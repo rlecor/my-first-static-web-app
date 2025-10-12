@@ -297,7 +297,7 @@
 <body>
     <div class="container">
         <div class="header">
-            <!--h1>How Many Workout Timers?</h1-->
+            <!--h1>Multi-Timer Widget</h1-->
             <div class="timer-count-selector">
                 <label for="timerCount">Number of Timers:</label>
                 <input type="number" id="timerCount" min="1" max="5" value="1">
@@ -435,7 +435,7 @@
                         this.element.classList.add('finished');
                         this.startBtn.disabled = false;
                         this.pauseBtn.disabled = true;
-                        //alert(`${this.nameInput.value}: Time's up!`);
+                        this.playBeep();
                     }
                 }, 1000);
             }
@@ -462,6 +462,24 @@
                 this.minutesInput.disabled = false;
                 this.secondsInput.disabled = false;
                 this.nameInput.disabled = false;
+            }
+
+            playBeep() {
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+
+                oscillator.frequency.value = 800;
+                oscillator.type = 'sine';
+
+                gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+
+                oscillator.start(audioContext.currentTime);
+                oscillator.stop(audioContext.currentTime + 0.5);
             }
         }
 
