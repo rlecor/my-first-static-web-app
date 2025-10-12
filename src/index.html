@@ -5,145 +5,142 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Stopwatch</title>
   <style>
-    :root{--bg:#0f172a;--card:#0b1220;--accent:#60a5fa;--muted:#94a3b8;--glass:rgba(255,255,255,0.03)}
-    html,body{height:100%;margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,'Helvetica Neue',Arial}
-    body{display:grid;place-items:center;background:linear-gradient(180deg,#071124 0%, #071829 100%);color:#e6eef8}
-    .card{width:min(720px,92vw);background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent);border-radius:14px;padding:28px;box-shadow:0 6px 30px rgba(2,6,23,0.7)}
-    .header{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
-    h1{font-size:1.15rem;margin:0}
-    .time{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:56px;text-align:center;margin:12px 0}
-    .controls{display:flex;gap:10px;justify-content:center;margin-top:8px}
-    button{background:var(--glass);border:1px solid rgba(255,255,255,0.04);color:inherit;padding:10px 14px;border-radius:10px;font-weight:600;cursor:pointer}
-    button.primary{background:linear-gradient(90deg,var(--accent),#3b82f6);color:#012;text-shadow:0 1px 0 rgba(255,255,255,0.02)}
-    button.ghost{background:transparent;border:1px solid rgba(255,255,255,0.06)}
-    .laps{margin-top:18px;max-height:220px;overflow:auto;border-radius:8px;padding:10px;background:rgba(255,255,255,0.01);border:1px solid rgba(255,255,255,0.02)}
-    .lap{display:flex;justify-content:space-between;padding:8px 6px;border-bottom:1px dashed rgba(255,255,255,0.02);font-family:ui-monospace}
-    .empty{color:var(--muted);text-align:center;padding:18px}
-    .small{font-size:0.9rem;color:var(--muted)}
-    .footer{display:flex;justify-content:space-between;align-items:center;margin-top:14px;color:var(--muted);font-size:0.85rem}
-    @media (max-width:420px){.time{font-size:40px}}
+    :root{
+      --bg:#ffffff;--fg:#111111;--card:#f3f4f6;--accent:#0b84ff;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    }
+    @media (prefers-color-scheme: dark){
+      :root{ --bg:#0b0b0c; --fg:#e6e7e8; --card:#121214; --accent:#4ea6ff }
+    }
+    html,body{height:100%;margin:0;background:var(--bg);color:var(--fg)}
+    .wrap{min-height:100%;display:flex;align-items:center;justify-content:center;padding:2rem}
+    .card{background:var(--card);padding:2rem;border-radius:12px;box-shadow:0 6px 20px rgba(0,0,0,0.08);width:min(520px,96%);text-align:center}
+
+    .time{font-size:3.25rem;font-weight:600;letter-spacing:0.02em;margin:0.25rem 0}
+    .controls{display:flex;gap:0.5rem;margin-top:1rem;justify-content:center;flex-wrap:wrap}
+    button{appearance:none;border:0;padding:0.6rem 1rem;border-radius:8px;font-weight:600;cursor:pointer;background:transparent}
+    .btn-primary{background:var(--accent);color:#fff}
+    .btn-ghost{background:transparent;border:1px solid rgba(0,0,0,0.08)}
+    @media (prefers-color-scheme: dark){
+      .btn-ghost{border-color:rgba(255,255,255,0.06)}
+    }
+    .laps{max-height:160px;overflow:auto;text-align:left;margin-top:1rem;padding-top:1rem;border-top:1px dashed rgba(0,0,0,0.06)}
+    .lap{padding:0.35rem 0;display:flex;justify-content:space-between;font-family:monospace}
+    .hint{opacity:0.7;font-size:0.9rem;margin-top:0.5rem}
+
+    /* Focus styles */
+    button:focus{outline:3px solid color-mix(in srgb, var(--accent) 20%, transparent);outline-offset:2px}
   </style>
 </head>
 <body>
-  <main class="card" role="main">
-    <div class="header">
-      <h1>Stopwatch</h1>
-      <div class="small">Keyboard: <kbd>Space</kbd> Start/Stop • <kbd>R</kbd> Reset • <kbd>L</kbd> Lap</div>
+  <div class="wrap">
+    <div class="card" role="application" aria-label="Stopwatch">
+      <h1 style="margin:0;font-size:1.125rem;font-weight:700">Stopwatch</h1>
+      <p class="time" id="display" aria-live="polite">0:00:00.00</p>
+
+      <div class="controls">
+        <button id="startStop" class="btn-primary">Start</button>
+        <button id="lapBtn" class="btn-ghost">Lap</button>
+        <button id="resetBtn" class="btn-ghost">Reset</button>
+      </div>
+
+      <div class="laps" id="laps" aria-label="Laps"></div>
+      <div class="hint">Keyboard: Space = Start/Stop · R = Reset · L = Lap</div>
     </div>
-
-    <div id="display" class="time" aria-live="polite">00:00:00.000</div>
-
-    <div class="controls" role="toolbar" aria-label="Stopwatch controls">
-      <button id="startStop" class="primary" aria-pressed="false">Start</button>
-      <button id="lapBtn" class="ghost" disabled>Lap</button>
-      <button id="resetBtn" class="ghost" disabled>Reset</button>
-    </div>
-
-    <section class="laps" aria-label="Laps">
-      <div id="lapsContainer" class="empty">No laps yet</div>
-    </section>
-
-    <div class="footer">
-      <div class="small">Precision: milliseconds</div>
-      <div class="small">Created: Single-file HTML + JS</div>
-    </div>
-  </main>
+  </div>
 
   <script>
-    // Simple high-precision stopwatch using performance.now()
+    // Accurate stopwatch using performance.now() and requestAnimationFrame
     const display = document.getElementById('display');
-    const startStop = document.getElementById('startStop');
+    const startStopBtn = document.getElementById('startStop');
     const resetBtn = document.getElementById('resetBtn');
     const lapBtn = document.getElementById('lapBtn');
-    const lapsContainer = document.getElementById('lapsContainer');
+    const lapsEl = document.getElementById('laps');
 
     let running = false;
-    let startTime = 0; // timestamp when started (performance.now())
-    let elapsedBefore = 0; // ms already elapsed before current run
+    let startTime = 0;       // timestamp when started
+    let elapsedBefore = 0;   // ms accumulated before current run
     let rafId = null;
-    let lapCount = 0;
 
-    function formatTime(ms) {
-      const totalMilliseconds = Math.floor(ms);
-      const milliseconds = totalMilliseconds % 1000;
-      const totalSeconds = Math.floor(totalMilliseconds / 1000);
-      const seconds = totalSeconds % 60;
-      const totalMinutes = Math.floor(totalSeconds / 60);
-      const minutes = totalMinutes % 60;
-      const hours = Math.floor(totalMinutes / 60);
-      return `${String(hours).padStart(2,'0')}:${String(minutes).padStart(2,'0')}:${String(seconds).padStart(2,'0')}.${String(milliseconds).padStart(3,'0')}`;
+    function pad(n, digits=2){ return String(n).padStart(digits,'0'); }
+    function formatTime(ms){
+      const totalCs = Math.floor(ms/10); // centiseconds
+      const cs = totalCs % 100;
+      const totalSeconds = Math.floor(ms/1000);
+      const s = totalSeconds % 60;
+      const totalMinutes = Math.floor(totalSeconds/60);
+      const m = totalMinutes % 60;
+      const h = Math.floor(totalMinutes/60);
+      return `${h}:${pad(m)}:${pad(s)}.${pad(cs,2)}`;
     }
 
-    function update() {
+    function update(){
       const now = performance.now();
-      const elapsed = elapsedBefore + (now - startTime);
-      display.textContent = formatTime(elapsed);
+      const elapsed = elapsedBefore + (running ? now - startTime : 0);
+      display.textContent = formatTime(Math.floor(elapsed));
       rafId = requestAnimationFrame(update);
     }
 
-    function start() {
-      startTime = performance.now();
+    function start(){
+      if (running) return;
       running = true;
-      startStop.textContent = 'Stop';
-      startStop.setAttribute('aria-pressed','true');
-      resetBtn.disabled = true; // reset allowed only when stopped
-      lapBtn.disabled = false;
-      rafId = requestAnimationFrame(update);
+      startTime = performance.now();
+      startStopBtn.textContent = 'Stop';
+      startStopBtn.classList.remove('btn-primary');
+      startStopBtn.classList.add('btn-ghost');
+      if (!rafId) rafId = requestAnimationFrame(update);
     }
-
-    function stop() {
+    function stop(){
+      if (!running) return;
       running = false;
-      cancelAnimationFrame(rafId);
       const now = performance.now();
       elapsedBefore += now - startTime;
-      startStop.textContent = 'Start';
-      startStop.setAttribute('aria-pressed','false');
-      resetBtn.disabled = false;
-      lapBtn.disabled = true;
+      startStopBtn.textContent = 'Start';
+      startStopBtn.classList.remove('btn-ghost');
+      startStopBtn.classList.add('btn-primary');
     }
 
-    function reset() {
+    function reset(){
+      running = false;
+      cancelAnimationFrame(rafId);
+      rafId = null;
+      startTime = 0;
       elapsedBefore = 0;
-      display.textContent = '00:00:00.000';
-      lapsContainer.innerHTML = '<div class="empty">No laps yet</div>';
-      lapCount = 0;
-      resetBtn.disabled = true;
+      display.textContent = '0:00:00.00';
+      startStopBtn.textContent = 'Start';
+      startStopBtn.classList.remove('btn-ghost');
+      startStopBtn.classList.add('btn-primary');
+      lapsEl.innerHTML = '';
     }
 
-    function lap() {
-      lapCount += 1;
-      const nowMs = elapsedBefore + (running ? (performance.now() - startTime) : 0);
-      const node = document.createElement('div');
-      node.className = 'lap';
-      node.innerHTML = `<div>Lap ${lapCount}</div><div>${formatTime(nowMs)}</div>`;
-      if (lapsContainer.classList.contains('empty')) lapsContainer.innerHTML = '';
-      lapsContainer.prepend(node);
+    function addLap(){
+      const now = performance.now();
+      const elapsed = elapsedBefore + (running ? now - startTime : 0);
+      const li = document.createElement('div');
+      li.className = 'lap';
+      li.innerHTML = `<div>Lap</div><div>${formatTime(Math.floor(elapsed))}</div>`;
+      lapsEl.prepend(li);
     }
 
-    // Button handlers
-    startStop.addEventListener('click', () => running ? stop() : start());
+    // Button events
+    startStopBtn.addEventListener('click', ()=> running ? stop() : start());
     resetBtn.addEventListener('click', reset);
-    lapBtn.addEventListener('click', lap);
+    lapBtn.addEventListener('click', addLap);
 
-    // Keyboard shortcuts: Space = start/stop, R = reset, L = lap
-    window.addEventListener('keydown', (e) => {
-      if (e.code === 'Space') { e.preventDefault(); startStop.click(); }
-      if (e.key.toLowerCase() === 'r') { resetBtn.click(); }
-      if (e.key.toLowerCase() === 'l') { if (!lapBtn.disabled) lapBtn.click(); }
-    });
-
-    // Persist last elapsed time to sessionStorage so page refresh keeps time when stopped
-    window.addEventListener('beforeunload', () => {
-      sessionStorage.setItem('stopwatch_elapsedBefore', String(elapsedBefore));
-    });
-    const saved = sessionStorage.getItem('stopwatch_elapsedBefore');
-    if (saved) {
-      elapsedBefore = Number(saved) || 0;
-      if (elapsedBefore > 0) {
-        display.textContent = formatTime(elapsedBefore);
-        resetBtn.disabled = false;
+    // Keyboard shortcuts
+    window.addEventListener('keydown', (e)=>{
+      if (e.code === 'Space'){
+        e.preventDefault();
+        running ? stop() : start();
+      } else if (e.key.toLowerCase() === 'r'){
+        reset();
+      } else if (e.key.toLowerCase() === 'l'){
+        addLap();
       }
-    }
+    });
+
+    // Start RAF so elapsed shows correctly even when stopped (keeps display responsive)
+    if (!rafId) rafId = requestAnimationFrame(update);
   </script>
 </body>
 </html>
