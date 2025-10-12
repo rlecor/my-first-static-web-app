@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Timer Widget</title>
+    <title>Multi-Timer Widget</title>
     <style>
         * {
             margin: 0;
@@ -13,36 +13,162 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
             min-height: 100vh;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+
+        .header h1 {
+            color: #2d3748;
+            margin-bottom: 20px;
+            font-size: 32px;
+        }
+
+        .timer-count-selector {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .timer-count-selector label {
+            font-size: 18px;
+            font-weight: 600;
+            color: #4a5568;
+        }
+
+        .timer-count-selector input {
+            width: 80px;
+            padding: 10px;
+            font-size: 18px;
+            text-align: center;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-weight: 600;
+        }
+
+        .timer-count-selector button {
+            padding: 10px 25px;
+            font-size: 16px;
+            font-weight: 600;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .timer-count-selector button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .global-controls {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+
+        .global-controls h3 {
+            color: #2d3748;
+            margin-bottom: 15px;
+        }
+
+        .global-controls button {
+            padding: 12px 30px;
+            font-size: 16px;
+            font-weight: 600;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 5px;
+        }
+
+        .btn-start-all {
+            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+            color: white;
+        }
+
+        .btn-start-all:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(72, 187, 120, 0.3);
+        }
+
+        .btn-pause-all {
+            background: #fbbf24;
+            color: white;
+        }
+
+        .btn-pause-all:hover {
+            background: #f59e0b;
+            transform: translateY(-2px);
+        }
+
+        .btn-reset-all {
+            background: #ef4444;
+            color: white;
+        }
+
+        .btn-reset-all:hover {
+            background: #dc2626;
+            transform: translateY(-2px);
+        }
+
+        .timers-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
         }
 
         .timer-widget {
             background: white;
-            border-radius: 20px;
-            padding: 40px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
             text-align: center;
-            min-width: 320px;
+        }
+
+        .timer-header {
+            font-size: 20px;
+            font-weight: 700;
+            color: #667eea;
+            margin-bottom: 15px;
         }
 
         .timer-display {
-            font-size: 64px;
+            font-size: 48px;
             font-weight: 700;
             color: #2d3748;
-            margin: 20px 0;
+            margin: 15px 0;
             font-variant-numeric: tabular-nums;
             letter-spacing: -2px;
         }
 
         .timer-inputs {
             display: flex;
-            gap: 10px;
+            gap: 8px;
             justify-content: center;
-            margin: 20px 0;
+            margin: 15px 0;
         }
 
         .time-input {
@@ -52,7 +178,7 @@
         }
 
         .time-input label {
-            font-size: 12px;
+            font-size: 10px;
             color: #718096;
             margin-bottom: 5px;
             text-transform: uppercase;
@@ -60,9 +186,9 @@
         }
 
         .time-input input {
-            width: 70px;
-            padding: 10px;
-            font-size: 20px;
+            width: 60px;
+            padding: 8px;
+            font-size: 16px;
             text-align: center;
             border: 2px solid #e2e8f0;
             border-radius: 8px;
@@ -76,17 +202,17 @@
 
         .controls {
             display: flex;
-            gap: 10px;
+            gap: 8px;
             justify-content: center;
-            margin-top: 30px;
+            margin-top: 20px;
         }
 
-        button {
-            padding: 12px 30px;
-            font-size: 16px;
+        .controls button {
+            padding: 10px 20px;
+            font-size: 14px;
             font-weight: 600;
             border: none;
-            border-radius: 10px;
+            border-radius: 8px;
             cursor: pointer;
             transition: all 0.3s ease;
         }
@@ -98,7 +224,7 @@
 
         .btn-start:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+            box-shadow: 0 5px 10px rgba(102, 126, 234, 0.3);
         }
 
         .btn-pause {
@@ -133,10 +259,10 @@
 
         @keyframes pulse {
             0%, 100% {
-                box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
             }
             50% {
-                box-shadow: 0 20px 60px rgba(102, 126, 234, 0.4);
+                box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
             }
         }
 
@@ -152,131 +278,211 @@
     </style>
 </head>
 <body>
-    <div class="timer-widget" id="timerWidget">
-        <div class="timer-display" id="timerDisplay">00:00:00</div>
-        
-        <div class="timer-inputs">
-            <div class="time-input">
-                <label for="hours">Hours</label>
-                <input type="number" id="hours" min="0" max="23" value="0">
-            </div>
-            <div class="time-input">
-                <label for="minutes">Minutes</label>
-                <input type="number" id="minutes" min="0" max="59" value="5">
-            </div>
-            <div class="time-input">
-                <label for="seconds">Seconds</label>
-                <input type="number" id="seconds" min="0" max="59" value="0">
+    <div class="container">
+        <div class="header">
+            <h1>Multi-Timer Widget</h1>
+            <div class="timer-count-selector">
+                <label for="timerCount">Number of Timers:</label>
+                <input type="number" id="timerCount" min="1" max="5" value="1">
+                <button id="updateTimersBtn">Update</button>
             </div>
         </div>
 
-        <div class="controls">
-            <button class="btn-start" id="startBtn">Start</button>
-            <button class="btn-pause" id="pauseBtn" disabled>Pause</button>
-            <button class="btn-reset" id="resetBtn">Reset</button>
+        <div class="global-controls">
+            <h3>Global Controls</h3>
+            <button class="btn-start-all" id="startAllBtn">Start All</button>
+            <button class="btn-pause-all" id="pauseAllBtn">Pause All</button>
+            <button class="btn-reset-all" id="resetAllBtn">Reset All</button>
         </div>
+
+        <div class="timers-grid" id="timersGrid"></div>
     </div>
 
     <script>
-        let totalSeconds = 0;
-        let remainingSeconds = 0;
-        let timerInterval = null;
-        let isRunning = false;
+        const timers = [];
+        let timerCount = 1;
 
-        const display = document.getElementById('timerDisplay');
-        const widget = document.getElementById('timerWidget');
-        const startBtn = document.getElementById('startBtn');
-        const pauseBtn = document.getElementById('pauseBtn');
-        const resetBtn = document.getElementById('resetBtn');
-        const hoursInput = document.getElementById('hours');
-        const minutesInput = document.getElementById('minutes');
-        const secondsInput = document.getElementById('seconds');
-
-        function formatTime(secs) {
-            const h = Math.floor(secs / 3600);
-            const m = Math.floor((secs % 3600) / 60);
-            const s = secs % 60;
-            return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
-        }
-
-        function updateDisplay() {
-            display.textContent = formatTime(remainingSeconds);
-        }
-
-        function startTimer() {
-            if (!isRunning) {
-                totalSeconds = parseInt(hoursInput.value) * 3600 + 
-                              parseInt(minutesInput.value) * 60 + 
-                              parseInt(secondsInput.value);
-                
-                if (totalSeconds === 0) {
-                    alert('Please set a time greater than 0!');
-                    return;
-                }
-                
-                remainingSeconds = totalSeconds;
-                updateDisplay();
+        class Timer {
+            constructor(id) {
+                this.id = id;
+                this.totalSeconds = 0;
+                this.remainingSeconds = 0;
+                this.interval = null;
+                this.isRunning = false;
+                this.element = null;
+                this.createElements();
             }
 
-            isRunning = true;
-            widget.classList.add('running');
-            widget.classList.remove('finished');
-            startBtn.disabled = true;
-            pauseBtn.disabled = false;
-            hoursInput.disabled = true;
-            minutesInput.disabled = true;
-            secondsInput.disabled = true;
+            createElements() {
+                const widget = document.createElement('div');
+                widget.className = 'timer-widget';
+                widget.innerHTML = `
+                    <div class="timer-header">Timer ${this.id}</div>
+                    <div class="timer-display" data-id="${this.id}">00:00:00</div>
+                    
+                    <div class="timer-inputs">
+                        <div class="time-input">
+                            <label>Hours</label>
+                            <input type="number" class="hours" min="0" max="23" value="0">
+                        </div>
+                        <div class="time-input">
+                            <label>Minutes</label>
+                            <input type="number" class="minutes" min="0" max="59" value="${this.id}">
+                        </div>
+                        <div class="time-input">
+                            <label>Seconds</label>
+                            <input type="number" class="seconds" min="0" max="59" value="0">
+                        </div>
+                    </div>
 
-            timerInterval = setInterval(() => {
-                remainingSeconds--;
-                updateDisplay();
+                    <div class="controls">
+                        <button class="btn-start start-btn">Start</button>
+                        <button class="btn-pause pause-btn" disabled>Pause</button>
+                        <button class="btn-reset reset-btn">Reset</button>
+                    </div>
+                `;
 
-                if (remainingSeconds <= 0) {
-                    clearInterval(timerInterval);
-                    isRunning = false;
-                    widget.classList.remove('running');
-                    widget.classList.add('finished');
-                    startBtn.disabled = false;
-                    pauseBtn.disabled = true;
-                    alert('Time\'s up!');
+                this.element = widget;
+                this.display = widget.querySelector('.timer-display');
+                this.startBtn = widget.querySelector('.start-btn');
+                this.pauseBtn = widget.querySelector('.pause-btn');
+                this.resetBtn = widget.querySelector('.reset-btn');
+                this.hoursInput = widget.querySelector('.hours');
+                this.minutesInput = widget.querySelector('.minutes');
+                this.secondsInput = widget.querySelector('.seconds');
+
+                this.startBtn.addEventListener('click', () => this.start());
+                this.pauseBtn.addEventListener('click', () => this.pause());
+                this.resetBtn.addEventListener('click', () => this.reset());
+
+                [this.hoursInput, this.minutesInput, this.secondsInput].forEach(input => {
+                    input.addEventListener('input', function() {
+                        if (this.value < 0) this.value = 0;
+                        if (this.classList.contains('hours') && this.value > 23) this.value = 23;
+                        if ((this.classList.contains('minutes') || this.classList.contains('seconds')) && this.value > 59) this.value = 59;
+                    });
+                });
+            }
+
+            formatTime(secs) {
+                const h = Math.floor(secs / 3600);
+                const m = Math.floor((secs % 3600) / 60);
+                const s = secs % 60;
+                return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+            }
+
+            updateDisplay() {
+                this.display.textContent = this.formatTime(this.remainingSeconds);
+            }
+
+            start() {
+                if (!this.isRunning) {
+                    this.totalSeconds = parseInt(this.hoursInput.value) * 3600 + 
+                                      parseInt(this.minutesInput.value) * 60 + 
+                                      parseInt(this.secondsInput.value);
+                    
+                    if (this.totalSeconds === 0) {
+                        alert(`Timer ${this.id}: Please set a time greater than 0!`);
+                        return;
+                    }
+                    
+                    this.remainingSeconds = this.totalSeconds;
+                    this.updateDisplay();
                 }
-            }, 1000);
+
+                this.isRunning = true;
+                this.element.classList.add('running');
+                this.element.classList.remove('finished');
+                this.startBtn.disabled = true;
+                this.pauseBtn.disabled = false;
+                this.hoursInput.disabled = true;
+                this.minutesInput.disabled = true;
+                this.secondsInput.disabled = true;
+
+                this.interval = setInterval(() => {
+                    this.remainingSeconds--;
+                    this.updateDisplay();
+
+                    if (this.remainingSeconds <= 0) {
+                        clearInterval(this.interval);
+                        this.isRunning = false;
+                        this.element.classList.remove('running');
+                        this.element.classList.add('finished');
+                        this.startBtn.disabled = false;
+                        this.pauseBtn.disabled = true;
+                        alert(`Timer ${this.id}: Time's up!`);
+                    }
+                }, 1000);
+            }
+
+            pause() {
+                clearInterval(this.interval);
+                this.isRunning = false;
+                this.element.classList.remove('running');
+                this.startBtn.disabled = false;
+                this.pauseBtn.disabled = true;
+                this.startBtn.textContent = 'Resume';
+            }
+
+            reset() {
+                clearInterval(this.interval);
+                this.isRunning = false;
+                this.remainingSeconds = 0;
+                this.element.classList.remove('running', 'finished');
+                this.display.textContent = '00:00:00';
+                this.startBtn.disabled = false;
+                this.pauseBtn.disabled = true;
+                this.startBtn.textContent = 'Start';
+                this.hoursInput.disabled = false;
+                this.minutesInput.disabled = false;
+                this.secondsInput.disabled = false;
+            }
         }
 
-        function pauseTimer() {
-            clearInterval(timerInterval);
-            isRunning = false;
-            widget.classList.remove('running');
-            startBtn.disabled = false;
-            pauseBtn.disabled = true;
-            startBtn.textContent = 'Resume';
+        function updateTimers() {
+            const count = parseInt(document.getElementById('timerCount').value);
+            if (count < 1 || count > 5) {
+                alert('Please enter a number between 1 and 5');
+                return;
+            }
+
+            // Clear existing timers
+            timers.forEach(timer => {
+                if (timer.interval) clearInterval(timer.interval);
+            });
+            timers.length = 0;
+
+            const grid = document.getElementById('timersGrid');
+            grid.innerHTML = '';
+
+            // Create new timers
+            for (let i = 1; i <= count; i++) {
+                const timer = new Timer(i);
+                timers.push(timer);
+                grid.appendChild(timer.element);
+            }
+
+            timerCount = count;
         }
 
-        function resetTimer() {
-            clearInterval(timerInterval);
-            isRunning = false;
-            remainingSeconds = 0;
-            widget.classList.remove('running', 'finished');
-            display.textContent = '00:00:00';
-            startBtn.disabled = false;
-            pauseBtn.disabled = true;
-            startBtn.textContent = 'Start';
-            hoursInput.disabled = false;
-            minutesInput.disabled = false;
-            secondsInput.disabled = false;
-        }
+        document.getElementById('updateTimersBtn').addEventListener('click', updateTimers);
 
-        startBtn.addEventListener('click', startTimer);
-        pauseBtn.addEventListener('click', pauseTimer);
-        resetBtn.addEventListener('click', resetTimer);
+        document.getElementById('startAllBtn').addEventListener('click', () => {
+            timers.forEach(timer => timer.start());
+        });
 
-        [hoursInput, minutesInput, secondsInput].forEach(input => {
-            input.addEventListener('input', function() {
-                if (this.value < 0) this.value = 0;
-                if (this.id === 'hours' && this.value > 23) this.value = 23;
-                if ((this.id === 'minutes' || this.id === 'seconds') && this.value > 59) this.value = 59;
+        document.getElementById('pauseAllBtn').addEventListener('click', () => {
+            timers.forEach(timer => {
+                if (timer.isRunning) timer.pause();
             });
         });
+
+        document.getElementById('resetAllBtn').addEventListener('click', () => {
+            timers.forEach(timer => timer.reset());
+        });
+
+        // Initialize with 1 timer
+        updateTimers();
     </script>
 </body>
 </html>
