@@ -1,146 +1,282 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Stopwatch</title>
-  <style>
-    :root{
-      --bg:#ffffff;--fg:#111111;--card:#f3f4f6;--accent:#0b84ff;
-      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-    }
-    @media (prefers-color-scheme: dark){
-      :root{ --bg:#0b0b0c; --fg:#e6e7e8; --card:#121214; --accent:#4ea6ff }
-    }
-    html,body{height:100%;margin:0;background:var(--bg);color:var(--fg)}
-    .wrap{min-height:100%;display:flex;align-items:center;justify-content:center;padding:2rem}
-    .card{background:var(--card);padding:2rem;border-radius:12px;box-shadow:0 6px 20px rgba(0,0,0,0.08);width:min(520px,96%);text-align:center}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Timer Widget</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    .time{font-size:3.25rem;font-weight:600;letter-spacing:0.02em;margin:0.25rem 0}
-    .controls{display:flex;gap:0.5rem;margin-top:1rem;justify-content:center;flex-wrap:wrap}
-    button{appearance:none;border:0;padding:0.6rem 1rem;border-radius:8px;font-weight:600;cursor:pointer;background:transparent}
-    .btn-primary{background:var(--accent);color:#fff}
-    .btn-ghost{background:transparent;border:1px solid rgba(0,0,0,0.08)}
-    @media (prefers-color-scheme: dark){
-      .btn-ghost{border-color:rgba(255,255,255,0.06)}
-    }
-    .laps{max-height:160px;overflow:auto;text-align:left;margin-top:1rem;padding-top:1rem;border-top:1px dashed rgba(0,0,0,0.06)}
-    .lap{padding:0.35rem 0;display:flex;justify-content:space-between;font-family:monospace}
-    .hint{opacity:0.7;font-size:0.9rem;margin-top:0.5rem}
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
 
-    /* Focus styles */
-    button:focus{outline:3px solid color-mix(in srgb, var(--accent) 20%, transparent);outline-offset:2px}
-  </style>
+        .timer-widget {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            min-width: 320px;
+        }
+
+        .timer-display {
+            font-size: 64px;
+            font-weight: 700;
+            color: #2d3748;
+            margin: 20px 0;
+            font-variant-numeric: tabular-nums;
+            letter-spacing: -2px;
+        }
+
+        .timer-inputs {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .time-input {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .time-input label {
+            font-size: 12px;
+            color: #718096;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        .time-input input {
+            width: 70px;
+            padding: 10px;
+            font-size: 20px;
+            text-align: center;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-weight: 600;
+        }
+
+        .time-input input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .controls {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        button {
+            padding: 12px 30px;
+            font-size: 16px;
+            font-weight: 600;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-start {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-start:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-pause {
+            background: #fbbf24;
+            color: white;
+        }
+
+        .btn-pause:hover {
+            background: #f59e0b;
+            transform: translateY(-2px);
+        }
+
+        .btn-reset {
+            background: #ef4444;
+            color: white;
+        }
+
+        .btn-reset:hover {
+            background: #dc2626;
+            transform: translateY(-2px);
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .timer-widget.running {
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            }
+            50% {
+                box-shadow: 0 20px 60px rgba(102, 126, 234, 0.4);
+            }
+        }
+
+        .timer-widget.finished .timer-display {
+            color: #ef4444;
+            animation: blink 1s ease-in-out infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+    </style>
 </head>
 <body>
-  <div class="wrap">
-    <div class="card" role="application" aria-label="Stopwatch">
-      <h1 style="margin:0;font-size:1.125rem;font-weight:700">Stopwatch</h1>
-      <p class="time" id="display" aria-live="polite">0:00:00.00</p>
+    <div class="timer-widget" id="timerWidget">
+        <div class="timer-display" id="timerDisplay">00:00:00</div>
+        
+        <div class="timer-inputs">
+            <div class="time-input">
+                <label for="hours">Hours</label>
+                <input type="number" id="hours" min="0" max="23" value="0">
+            </div>
+            <div class="time-input">
+                <label for="minutes">Minutes</label>
+                <input type="number" id="minutes" min="0" max="59" value="5">
+            </div>
+            <div class="time-input">
+                <label for="seconds">Seconds</label>
+                <input type="number" id="seconds" min="0" max="59" value="0">
+            </div>
+        </div>
 
-      <div class="controls">
-        <button id="startStop" class="btn-primary">Start</button>
-        <button id="lapBtn" class="btn-ghost">Lap</button>
-        <button id="resetBtn" class="btn-ghost">Reset</button>
-      </div>
-
-      <div class="laps" id="laps" aria-label="Laps"></div>
-      <div class="hint">Keyboard: Space = Start/Stop · R = Reset · L = Lap</div>
+        <div class="controls">
+            <button class="btn-start" id="startBtn">Start</button>
+            <button class="btn-pause" id="pauseBtn" disabled>Pause</button>
+            <button class="btn-reset" id="resetBtn">Reset</button>
+        </div>
     </div>
-  </div>
 
-  <script>
-    // Accurate stopwatch using performance.now() and requestAnimationFrame
-    const display = document.getElementById('display');
-    const startStopBtn = document.getElementById('startStop');
-    const resetBtn = document.getElementById('resetBtn');
-    const lapBtn = document.getElementById('lapBtn');
-    const lapsEl = document.getElementById('laps');
+    <script>
+        let totalSeconds = 0;
+        let remainingSeconds = 0;
+        let timerInterval = null;
+        let isRunning = false;
 
-    let running = false;
-    let startTime = 0;       // timestamp when started
-    let elapsedBefore = 0;   // ms accumulated before current run
-    let rafId = null;
+        const display = document.getElementById('timerDisplay');
+        const widget = document.getElementById('timerWidget');
+        const startBtn = document.getElementById('startBtn');
+        const pauseBtn = document.getElementById('pauseBtn');
+        const resetBtn = document.getElementById('resetBtn');
+        const hoursInput = document.getElementById('hours');
+        const minutesInput = document.getElementById('minutes');
+        const secondsInput = document.getElementById('seconds');
 
-    function pad(n, digits=2){ return String(n).padStart(digits,'0'); }
-    function formatTime(ms){
-      const totalCs = Math.floor(ms/10); // centiseconds
-      const cs = totalCs % 100;
-      const totalSeconds = Math.floor(ms/1000);
-      const s = totalSeconds % 60;
-      const totalMinutes = Math.floor(totalSeconds/60);
-      const m = totalMinutes % 60;
-      const h = Math.floor(totalMinutes/60);
-      return `${h}:${pad(m)}:${pad(s)}.${pad(cs,2)}`;
-    }
+        function formatTime(secs) {
+            const h = Math.floor(secs / 3600);
+            const m = Math.floor((secs % 3600) / 60);
+            const s = secs % 60;
+            return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+        }
 
-    function update(){
-      const now = performance.now();
-      const elapsed = elapsedBefore + (running ? now - startTime : 0);
-      display.textContent = formatTime(Math.floor(elapsed));
-      rafId = requestAnimationFrame(update);
-    }
+        function updateDisplay() {
+            display.textContent = formatTime(remainingSeconds);
+        }
 
-    function start(){
-      if (running) return;
-      running = true;
-      startTime = performance.now();
-      startStopBtn.textContent = 'Stop';
-      startStopBtn.classList.remove('btn-primary');
-      startStopBtn.classList.add('btn-ghost');
-      if (!rafId) rafId = requestAnimationFrame(update);
-    }
-    function stop(){
-      if (!running) return;
-      running = false;
-      const now = performance.now();
-      elapsedBefore += now - startTime;
-      startStopBtn.textContent = 'Start';
-      startStopBtn.classList.remove('btn-ghost');
-      startStopBtn.classList.add('btn-primary');
-    }
+        function startTimer() {
+            if (!isRunning) {
+                totalSeconds = parseInt(hoursInput.value) * 3600 + 
+                              parseInt(minutesInput.value) * 60 + 
+                              parseInt(secondsInput.value);
+                
+                if (totalSeconds === 0) {
+                    alert('Please set a time greater than 0!');
+                    return;
+                }
+                
+                remainingSeconds = totalSeconds;
+                updateDisplay();
+            }
 
-    function reset(){
-      running = false;
-      cancelAnimationFrame(rafId);
-      rafId = null;
-      startTime = 0;
-      elapsedBefore = 0;
-      display.textContent = '0:00:00.00';
-      startStopBtn.textContent = 'Start';
-      startStopBtn.classList.remove('btn-ghost');
-      startStopBtn.classList.add('btn-primary');
-      lapsEl.innerHTML = '';
-    }
+            isRunning = true;
+            widget.classList.add('running');
+            widget.classList.remove('finished');
+            startBtn.disabled = true;
+            pauseBtn.disabled = false;
+            hoursInput.disabled = true;
+            minutesInput.disabled = true;
+            secondsInput.disabled = true;
 
-    function addLap(){
-      const now = performance.now();
-      const elapsed = elapsedBefore + (running ? now - startTime : 0);
-      const li = document.createElement('div');
-      li.className = 'lap';
-      li.innerHTML = `<div>Lap</div><div>${formatTime(Math.floor(elapsed))}</div>`;
-      lapsEl.prepend(li);
-    }
+            timerInterval = setInterval(() => {
+                remainingSeconds--;
+                updateDisplay();
 
-    // Button events
-    startStopBtn.addEventListener('click', ()=> running ? stop() : start());
-    resetBtn.addEventListener('click', reset);
-    lapBtn.addEventListener('click', addLap);
+                if (remainingSeconds <= 0) {
+                    clearInterval(timerInterval);
+                    isRunning = false;
+                    widget.classList.remove('running');
+                    widget.classList.add('finished');
+                    startBtn.disabled = false;
+                    pauseBtn.disabled = true;
+                    alert('Time\'s up!');
+                }
+            }, 1000);
+        }
 
-    // Keyboard shortcuts
-    window.addEventListener('keydown', (e)=>{
-      if (e.code === 'Space'){
-        e.preventDefault();
-        running ? stop() : start();
-      } else if (e.key.toLowerCase() === 'r'){
-        reset();
-      } else if (e.key.toLowerCase() === 'l'){
-        addLap();
-      }
-    });
+        function pauseTimer() {
+            clearInterval(timerInterval);
+            isRunning = false;
+            widget.classList.remove('running');
+            startBtn.disabled = false;
+            pauseBtn.disabled = true;
+            startBtn.textContent = 'Resume';
+        }
 
-    // Start RAF so elapsed shows correctly even when stopped (keeps display responsive)
-    if (!rafId) rafId = requestAnimationFrame(update);
-  </script>
+        function resetTimer() {
+            clearInterval(timerInterval);
+            isRunning = false;
+            remainingSeconds = 0;
+            widget.classList.remove('running', 'finished');
+            display.textContent = '00:00:00';
+            startBtn.disabled = false;
+            pauseBtn.disabled = true;
+            startBtn.textContent = 'Start';
+            hoursInput.disabled = false;
+            minutesInput.disabled = false;
+            secondsInput.disabled = false;
+        }
+
+        startBtn.addEventListener('click', startTimer);
+        pauseBtn.addEventListener('click', pauseTimer);
+        resetBtn.addEventListener('click', resetTimer);
+
+        [hoursInput, minutesInput, secondsInput].forEach(input => {
+            input.addEventListener('input', function() {
+                if (this.value < 0) this.value = 0;
+                if (this.id === 'hours' && this.value > 23) this.value = 23;
+                if ((this.id === 'minutes' || this.id === 'seconds') && this.value > 59) this.value = 59;
+            });
+        });
+    </script>
 </body>
 </html>
