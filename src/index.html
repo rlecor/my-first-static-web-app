@@ -79,6 +79,24 @@
             box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
         }
 
+        .menu-controls {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+
+        .writing-controls {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            text-align: left;
+        }
+
         .global-controls {
             background: white;
             border-radius: 15px;
@@ -296,16 +314,24 @@
 </head>
 <body>
     <div class="container">
-        <div class="header">
+        <!--div class="header">
+            <div class="global-controls">
+                <label for="timerCount">How to use the Timer | How Timers Can Help With Your Exercise Routines</label>
+				<label for="timerCount">Compare Online Timers | Contact me with any issues with this timer</label>
+            </div>
+        </div-->
+            <div class="menu-controls">
+                <label for="menu"><a href="#menu-1">How to use this Timer</a> | <a href="#menu-2">How Timers Help Your Exercise Routine</a></label>
+				<label for="menu">| <a href="#menu-3">Popular Online Timers</a> | <a href="mailto:rlecor@unautum.com">Contact me </a></label>
+            </div>
+
+        <div class="global-controls">
             <!--h1>Multi-Timer Widget</h1-->
             <div class="timer-count-selector">
                 <label for="timerCount">Number of Timers:</label>
                 <input type="number" id="timerCount" min="1" max="5" value="1">
                 <button id="updateTimersBtn">Update</button>
             </div>
-        </div>
-
-        <div class="global-controls">
             <!--h3>Global Controls</h3-->
             <button class="btn-start-all" id="startAllBtn">Start All</button>
             <button class="btn-pause-all" id="pauseAllBtn">Pause All</button>
@@ -528,5 +554,249 @@
         // Initialize with 1 timer
         updateTimers();
     </script>
+	
+<br>
+
+
+
+    <div class="container">
+            <div class="writing-controls">
+                <!--label for="menu">How to use the Timer | How Timers Can Help With Your Exercise Routines</label>
+				<label for="menu">Compare Online Timers | Contact me with any issues with this timer</label-->
+				
+
+<!-------------------------------------HOW TO USE THE TIMER-->				
+<div style="font-family: Arial, sans-serif; max-width: 600px; margin: 20px auto; padding: 20px; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+
+    <h1 id="menu-1" style="border-bottom: 2px solid #007bff; padding-bottom: 5px; color: #007bff;">
+        &#x23F1; How To Use This Workout Timer
+    </h1>
+    <p style="font-style: italic; color: #555;">
+        This card gives you the rundown on all the features and how to use your flexible multi-timer application.
+    </p>
+
+    <hr style="margin: 15px 0; border-top: 1px solid #eee;">
+
+    <h2 style="color: #333;">&#x1F6E0; How to Use the Timers</h2>
+    <ol style="line-height: 1.6;margin-left: 20px;"><!--style=""-->
+        <li>
+            <strong>Select & Create:</strong> Use the input field at the top to select the **number of timers** you want (1-5).
+        </li>
+        <li>
+            Click **"Update"** to dynamically create the requested timers.
+        </li>
+        <li>
+            <strong>Set Time:</strong> Adjust the time for each timer individually (defaults are set for convenience: Timer 1 = 1 min, Timer 2 = 2 min, etc.).
+        </li>
+    </ol>
+
+    <hr style="margin: 15px 0; border-top: 1px solid #eee;">
+
+    <h2 style="color: #333;">&#x25B6; Controlling Your Timers</h2>
+
+    <h3 style="color: #007bff; font-size: 1.1em;">Individual Controls</h3>
+    <p>Manage specific timers with their dedicated buttons:</p>
+    <ul style="list-style-type: disc; margin-left: 20px;">
+        <li>**Start**</li>
+        <li>**Pause**</li>
+        <li>**Reset**</li>
+    </ul>
+
+    <p style="margin-top: 15px;">
+        <strong style="color: #e44d26;">Note:</strong> Timers work **completely independently**. You can start Timer 1, then Timer 3 later, or use the global controls to manage them all.
+    </p>
+
+<br>
+    <h3 style="color: #007bff; font-size: 1.1em;">Global Controls</h3>
+    <p>Manage all active timers simultaneously:</p>
+    <ul style="list-style-type: disc; margin-left: 20px;">
+        <li>**"Start All"** - Starts all timers.</li>
+        <li>**"Pause All"** - Pauses all running timers.</li>
+        <li>**"Reset All"** - Resets all timers to their set time.</li>
+    </ul>
+
+    <hr style="margin: 15px 0; border-top: 1px solid #eee;">
+
+    <h2 style="color: #333;">&#x1F3F7; The Naming Feature</h2>
+    <p>Easily identify what each timer is for at a glance!</p>
+    <ul style="line-height: 1.6; list-style-type: square; margin-left: 20px;">
+        <li>
+            <strong>Custom Name:</strong> Click the editable text field (default "Timer X") above any timer to enter a custom name (e.g., "**Core**," "**Full Body**," "**Cardio**").
+        </li>
+        <li>
+            <strong>Finish Alert:</strong> When a timer finishes, the alert will show your **custom name** instead of the default.
+        </li>
+        <li>
+            <strong>Rules:</strong> The name field is **locked** while the timer is running. If you delete the name entirely, it **automatically reverts** to the default "Timer X."
+        </li>
+    </ul>
+
+    <hr style="margin: 15px 0; border-top: 1px solid #eee;">
+
+    <h2 style="color: #333;">&#x1F514; Timer Finish Alert (New Sound Feature)</h2>
+    <p>Say goodbye to interrupting popups!</p>
+    <ul style="line-height: 1.6; list-style-type: square; margin-left: 20px;">
+        <li>
+            <strong>Visual Alert:</strong> The timer display will **blink red**.
+        </li>
+        <li>
+            <strong>Audio Alert:</strong> A short, pleasant **beep sound** (800Hz tone for 0.5 seconds) will play.
+        </li>
+        <li>
+            <strong>Benefit:</strong> Timers can run without needing you to click "OK" on a popup.
+        </li>
+    </ul>
+
+    <hr style="margin: 15px 0; border-top: 1px solid #eee;">
+
+    <h2 style="color: #333;">&#x2728; Key Features at a Glance</h2>
+    <ul style="list-style-type: disc; margin-left: 20px;">
+        <li>
+            <strong>Dynamic Creation:</strong> Only the number of timers you select (1-5) are shown.
+        </li>
+        <li>
+            <strong>Responsive Layout:</strong> Timers arrange themselves nicely on **any screen size**.
+        </li>
+    </ul>
+
+</div>
+
+<!--------------------------------------->
+</div>
+			
+<!-------------------------------------HOW TIMERS CAN HELP YOUR EXERCISE ROUTINES-->				
+
+<div class="container">
+        <div class="writing-controls">
+            <!--label for="menu">How to use the Timer | How Timers Can Help With Your Exercise Routines</labe			<label for="menu">Compare Online Timers | Contact me with any issues with this timer</label-->	
+
+<div style="font-family: Arial, sans-serif; max-width: 600px; margin: 20px auto; padding: 20px; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+
+    <h1 id="menu-2" style="border-bottom: 2px solid #007bff; padding-bottom: 5px; color: #007bff;">
+        &#x23F1; How Workout Timers Can Transform Your Training Sessions and Boost Fitness Results
+    </h1>
+    <p style="font-style: italic; color: #555;">
+        In the fast-paced world of fitness, where every second counts, workout timers have emerged as an indispensable tool for athletes, personal trainers, and casual gym-goers alike. These simple yet powerful devices—whether standalone fitness timers, smartphone workout apps, or integrated gym equipment—are revolutionizing how we approach exercise by bringing structure, intensity, and measurability to our training routines.
+    </p>
+
+    <hr style="margin: 15px 0; border-top: 1px solid #eee;">
+
+    <h2 style="color: #333;">Maximizing Efficiency and Focus During Exercise</h2>
+	<p>
+	One of the primary benefits of using workout timers is their ability to maximize training efficiency and improve workout performance. When you're racing against the clock during a high-intensity interval training (HIIT) session or ensuring you're following proper rest periods between sets, timers eliminate guesswork and keep you accountable. This structured approach prevents the common pitfall of taking excessive rest time between exercises, which can diminish workout intensity and reduce overall fitness effectiveness. By maintaining consistent work-to-rest ratios with interval timers, you ensure that each training session delivers optimal results for muscle building, fat loss, and cardiovascular health.
+	</p>
+
+    <hr style="margin: 15px 0; border-top: 1px solid #eee;">
+
+    <h2 style="color: #333;">Enhancing Performance Through Interval Training and HIIT Workouts</h2>
+
+    <p>Manage specific timers with their dedicated buttons:</p>
+    <p>
+	Workout timers are particularly valuable for interval-based training protocols like Tabata timers, EMOM (Every Minute on the Minute), AMRAP (As Many Rounds as Possible), and circuit training. These popular fitness methodologies rely on precise timing to create the metabolic stress necessary for cardiovascular improvement, weight loss, and endurance building. A CrossFit timer or interval training app provides the clear auditory or visual cues needed to transition between work and rest periods, allowing you to focus entirely on proper form and maximum effort rather than watching a clock. This mental freedom enables you to push harder during work intervals, knowing the timer will signal when it's time to recover.
+	</p>
+
+    <hr style="margin: 15px 0; border-top: 1px solid #eee;">
+
+    <h2 style="color: #333;">Building Consistency and Tracking Progress with Time-Based Workouts</h2>
+    <p>
+	Fitness timers also serve as powerful tools for building workout consistency and tracking exercise progress over time. When you can measure exactly how long you sustained a plank hold, completed a strength training circuit, or maintained a particular heart rate zone during cardio, you create concrete data points for improvement. This objectivity removes subjective assessments of effort and provides clear performance benchmarks. Seeing that you've increased your work capacity by completing more rounds in the same timeframe or maintaining intensity for longer periods becomes a powerful motivator that drives continued fitness gains and helps prevent workout plateaus.
+	</p>
+
+    <hr style="margin: 15px 0; border-top: 1px solid #eee;">
+
+    <h2 style="color: #333;">Creating Mental Resilience and Workout Motivation</h2>
+    <p>
+	Beyond the physical benefits, workout timers contribute significantly to mental toughness and exercise motivation. When you're 30 seconds into a 60-second wall sit and your legs are burning, that ticking countdown timer becomes both your adversary and your coach. It teaches you to embrace discomfort for a defined period, building the psychological resilience that translates beyond the gym. This time-bound challenge makes difficult exercises more manageable—it's easier to commit to maximum effort when you know exactly when relief will come, making timers essential for both home workouts and gym training.
+	</p>
+
+    <hr style="margin: 15px 0; border-top: 1px solid #eee;">
+
+    <h2 style="color: #333;">Improving Group Training Dynamics and Fitness Classes</h2>
+	<p>
+	For fitness instructors, personal trainers, and group training sessions, workout timers create synchronized experiences that foster community and healthy competition. When everyone in a bootcamp class, CrossFit WOD, or spin class is working against the same clock, it creates shared accountability and collective energy that individual training often lacks. Participants push each other through challenging intervals, and the timer serves as the impartial judge that keeps everyone on the same page, making group fitness more effective and engaging.
+	</p>
+    
+    <hr style="margin: 15px 0; border-top: 1px solid #eee;">
+
+    <h2 style="color: #333;">Conclusion: Essential Fitness Equipment for Every Workout Routine</h2>
+	<p>
+	Incorporating workout timers into your training routine is a simple change that yields substantial returns for fitness enthusiasts at every level. They bring structure to chaos, intensity to complacency, and measurability to abstract effort. Whether you're a seasoned athlete fine-tuning performance, a beginner establishing consistent exercise habits, or someone following home workout programs, a workout timer transforms random exercise into purposeful training. In a world where time is our most precious resource, using it deliberately during workouts with interval timers, Tabata apps, or gym timers ensures that every drop of sweat contributes to meaningful progress toward your fitness goals, weight loss objectives, and strength training targets.
+	</p>
+
+
+</div>
+
+</div>
+
+</div>
+<!--------------------------------------->	
+	
+	
+	
+<!-------------------------------------SELECTED TIMERS COMPARISON-->				
+
+<div class="container">
+        <div class="writing-controls">
+            <!--label for="menu">How to use the Timer | How Timers Can Help With Your Exercise Routines</labe			<label for="menu">Compare Online Timers | Contact me with any issues with this timer</label-->		
+
+<div style="font-family: Arial, sans-serif; max-width: 600px; margin: 20px auto; padding: 20px; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+
+    <h1 id="menu-3" style="border-bottom: 2px solid #007bff; padding-bottom: 5px; color: #007bff;">
+        &#x23F1; Selected Online Workout Timers
+    </h1>
+    <p style="font-style: italic; color: #555;">
+        Here is a comparison table for 3 other popular online (web-based) workout/interval timers
+    </p>
+
+    <hr style="margin: 15px 0; border-top: 1px solid #eee;">
+
+    <h2 style="color: #333;">Links open in a new window</h2>
+	<p>
+
+<table border="1" cellspacing="0" cellpadding="8">
+  <thead>
+    <tr>
+      <th>Timer</th>
+      <th>Key Features</th>
+      <th>Pros</th>
+      <th>Limitations / Notes</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="https://exercisetimer.net/interval-timer" target="_blank" rel="noopener noreferrer">ExerciseTimer.net (Online Interval Timer)</a></td>
+      <td>Custom intervals, rounds, color coding, sound alerts</td>
+      <td>Simple UI, works across devices, supports embedding (iframe)</td>
+      <td>Basic UI, limited to interval/round logic, limited branding control</td>
+    </tr>
+    <tr>
+      <td><a href="https://www.pushpress.com/workout-timer/interval-timer" target="_blank" rel="noopener noreferrer">PushPress Workout Timer</a></td>
+      <td>Interval, AMRAP, Tabata, EMOM modes; voice prompts</td>
+      <td>Multiple workout formats built-in, coach / motivational feel, free web version</td>
+      <td>Advanced features more app-oriented; may need custom embed work</td>
+    </tr>
+    <tr>
+      <td><a href="https://www.intervaltimer.com/" target="_blank" rel="noopener noreferrer">Seconds (web via IntervalTimer.com)</a></td>
+      <td>HIIT / Tabata / circuit / custom timers; shareable web timers</td>
+      <td>Polished UI, color coding, voice prompts, background support</td>
+      <td>Some premium features (for apps) are paid, web version is focused on sharing rather than full app capabilities</td>
+    </tr>
+  </tbody>
+</table>
+
+
+
+	</p>
+
+
+
+</div>
+
+</div>
+
+</div>
+<!--------------------------------------->	
+	
+	
 </body>
 </html>
