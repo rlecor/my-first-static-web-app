@@ -1,8 +1,0 @@
-{
-  "name": "unautum-swa-api",
-  "private": true,
-  "type": "commonjs",
-  "dependencies": {
-    "@azure/functions": "^4.0.0"
-  }
-}
