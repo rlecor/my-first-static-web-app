@@ -1,7 +1,7 @@
 module.exports = async function (context, req) {
-  context.log("pageview");
-
   context.res = {
-    status: 204
+    status: 200,
+    headers: { "content-type": "application/json" },
+    body: { ok: true, ts: new Date().toISOString() }
   };
 };
