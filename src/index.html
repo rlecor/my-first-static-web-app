@@ -816,7 +816,7 @@
 </body>
 	
 <script>
-  fetch("/api/pageview").catch(() => {});
+  fetch("/api/pageview", { cache: "no-store" }).catch(() => {});
 </script>
 
 </html>
