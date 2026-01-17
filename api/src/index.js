@@ -1,9 +1,7 @@
-const { app } = require('@azure/functions');
-
-app.http('message', {
-    methods: ['GET', 'POST'],
-    authLevel: 'anonymous',
-    handler: async (request, context) => {
-        return { body: JSON.stringify({ "text": `Hello, from the API!` }) };
-    }
-});
+module.exports = async function (context, req) {
+  context.res = {
+    status: 200,
+    headers: { "content-type": "application/json" },
+    body: { ok: true, ts: new Date().toISOString() }
+  };
+};
