@@ -1,6 +1,6 @@
 const { app } = require("@azure/functions");
 
-app.http("ping", {
+app.http("message", {
   methods: ["GET"],
   authLevel: "anonymous",
   handler: async (request, context) => {
